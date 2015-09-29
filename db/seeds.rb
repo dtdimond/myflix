@@ -8,11 +8,11 @@
 
 Video.create(title: "Braveheart",
              description: "Mel Gibson gets angry.",
-             small_cover_url: "/public/tmp/monk.jpg",
-             large_cover_url: "/public/tmp/monk_large.jpg")
+             small_cover_url: "/tmp/monk.jpg",
+             large_cover_url: "/tmp/monk_large.jpg")
 
 Video.create(title: "Ex Machina",
              description: "Robots be crazy.",
-             small_cover_url: "/public/tmp/family_guy.jpg",
-             large_cover_url: "/public/tmp/futurama.jpg")
+             small_cover_url: "/tmp/family_guy.jpg",
+             large_cover_url: "/tmp/futurama.jpg")
 
