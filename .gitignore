@@ -16,3 +16,6 @@
 
 # Ignore the database.yml file
 config/database.yml
+
+# Not sure what .idea is, but ignore it for now
+.idea/
