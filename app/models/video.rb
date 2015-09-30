@@ -7,7 +7,7 @@ class Video < ActiveRecord::Base
   def self.search_by_title(search_term)
     return [] if search_term.blank?
 
-    Video.where("title LIKE '%" + search_term + "%'").order(:title)
+    Video.where("title LIKE ?", "%#{search_term}%").order(:title)
   end
 
 end
