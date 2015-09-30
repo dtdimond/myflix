@@ -5,7 +5,7 @@ describe Video do
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:description) }
 
-  describe '#search_by_title(search_term)' do
+  describe 'search_by_title(search_term)' do
     it 'returns [] array if search_term is empty string' do
       Video.create(title: "Nemo", description: "Lost fishy.")
       expect(Video.search_by_title("")).to eq([])
