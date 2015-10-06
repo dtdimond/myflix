@@ -3,11 +3,11 @@ require 'spec_helper'
 describe VideosController do
   describe 'GET show' do
     context 'with authentication' do
-      before { session[:user_id] = Fabricate(:user) }
+      before { session[:user_id] = Fabricate(:user).id }
 
       it 'sets the @video' do
         video = Fabricate(:video)
-        session[:user_id] = Fabricate(:user)
+        session[:user_id] = Fabricate(:user).id
 
         get :show, id: video.id
         expect(assigns(:video)).to eq(video)
@@ -15,7 +15,7 @@ describe VideosController do
 
       it 'renders the show template' do
         video = Fabricate(:video)
-        session[:user_id] = Fabricate(:user)
+        session[:user_id] = Fabricate(:user).id
 
         get :show, id: video.id
         expect(response).to render_template(:show)
@@ -32,7 +32,7 @@ describe VideosController do
 
   describe 'GET search' do
     context 'with authentication' do
-      before { session[:user_id] = Fabricate(:user) }
+      before { session[:user_id] = Fabricate(:user).id }
 
       it 'sets @videos' do
         video = Fabricate(:video, title: "Finding Nemo")
