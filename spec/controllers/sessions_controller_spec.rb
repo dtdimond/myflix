@@ -28,6 +28,10 @@ describe SessionsController do
         expect(session[:user_id]).to eq(user.id)
       end
 
+      it 'sets the success notice' do
+        expect(flash[:success]).not_to be_blank
+      end
+
       it 'redirects to home_path' do
         expect(response).to redirect_to(home_path)
       end
@@ -43,9 +47,31 @@ describe SessionsController do
         expect(session[:user_id]).not_to eq(user.id)
       end
 
+      it 'sets the danger notice' do
+        expect(flash[:danger]).not_to be_blank
+      end
+
       it 'redirects to login_path' do
         expect(response).to redirect_to(login_path)
       end
+    end
+  end
+
+  describe 'POST destroy' do
+    it 'sets the session user to nil' do
+      session[:user_id] = 1
+      post :destroy
+      expect(session[:user_id]).to be_nil
+    end
+
+    it 'sets the info notice' do
+      post :destroy
+      expect(flash[:info]).not_to be_blank
+    end
+
+    it 'redirects to the root path' do
+      post :destroy
+      expect(response).to redirect_to(root_path)
     end
   end
 end

@@ -14,11 +14,11 @@ describe UsersController do
   end
 
   describe 'POST create' do
-    context 'when inputs are valid' do
-      before { post :create, user: { email: "test@example.com", full_name: "Testy McTest", password: "Password" } }
+    context 'with valid inputs' do
+      before { post :create, user: Fabricate.attributes_for(:user) }
 
       it 'creates a new user' do
-        expect(User.first.email).to eq("test@example.com")
+        expect(User.count).to eq(1)
       end
 
       it 'redirects to the login path' do
@@ -27,7 +27,7 @@ describe UsersController do
 
     end
 
-    context 'when inputs are invalid' do
+    context 'with invalid inputs' do
       before { post :create, user: { email: "test@example.com" } }
 
       it 'does not create a new user' do
