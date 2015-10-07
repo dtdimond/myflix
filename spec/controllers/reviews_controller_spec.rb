@@ -51,14 +51,14 @@ describe ReviewsController do
       end
     end
 
-    it 'redirects to root_path if user not logged in with bad params' do
+    it 'redirects to login_path if user not logged in with bad params' do
       post :create, review: { text: "This is a review." }, video_id: 0
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(login_path)
     end
 
-    it 'redirects to root_path if user not logged in with good params' do
+    it 'redirects to login_path if user not logged in with good params' do
       post :create, review: Fabricate.attributes_for(:review), video_id: 0
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(login_path)
     end
 
   end

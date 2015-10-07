@@ -6,6 +6,7 @@ class ReviewsController < ApplicationController
     review = Review.new(params[:review].permit(:text, :rating))
     review.user = current_user
     review.video = @video
+
     if review.save
       redirect_to(video_path(@video))
     else

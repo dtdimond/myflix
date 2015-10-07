@@ -14,8 +14,8 @@ describe VideosController do
         expect(assigns(:video)).to eq(video)
       end
 
-      it 'sets the @reviews' do
-        expect(assigns(:reviews)).to eq(video.reviews.sort_by { |r| r.created_at })
+      it 'sets the @reviews with most recent first' do
+        expect(assigns(:reviews)).to eq(video.reviews.sort_by { |r| r.created_at }.reverse!)
       end
 
       it 'renders the show template' do
@@ -24,9 +24,9 @@ describe VideosController do
    end
 
     context 'without authentication' do
-      it 'redirects to root' do
+      it 'redirects to login_path' do
         get :show, id: 1
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(login_path)
       end
     end
   end
@@ -53,9 +53,9 @@ describe VideosController do
     end
 
     context 'without authentication' do
-      it 'redirects to root' do
+      it 'redirects to login_path' do
         get :search, search_term: "Nem"
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(login_path)
       end
     end
   end
