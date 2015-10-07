@@ -9,6 +9,8 @@
 Category.create(title: "Historical")
 Category.create(title: "Pyschothriller")
 
+User.create(full_name: "John Moviegoer", email: "john@movies.com", password: "Password")
+
 Video.create(title: "Braveheart",
              description: "Mel Gibson gets angry.",
              small_cover_url: "/tmp/monk.jpg",
@@ -20,3 +22,7 @@ Video.create(title: "Ex Machina",
              small_cover_url: "/tmp/family_guy.jpg",
              large_cover_url: "/tmp/futurama.jpg",
              category_id: 2)
+
+Review.create(text: "Braveheart sucks.", rating: 1, video: Video.first, user: User.first)
+Review.create(text: "Best movie ever.", rating: 4, video: Video.first, user: User.first)
+

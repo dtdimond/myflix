@@ -38,4 +38,42 @@ describe Video do
       expect(Video.search_by_title("Nem")).to eq([commander, nemo])
     end
   end
+
+  describe '#average_rating' do
+    it 'returns N/A if there are no reviews' do
+      video = Fabricate(:video) do
+        reviews(count: 0)
+      end
+
+      expect(video.average_rating).to eq("N/A")
+    end
+
+    it 'returns the single rating if there is only one review' do
+      video = Fabricate(:video) do
+        reviews(count: 1)
+      end
+
+      expect(video.average_rating).to eq(video.reviews.first.rating)
+    end
+
+    it 'returns the average rating, with 1 decimal, if there are multiple reviews' do
+      video = Fabricate(:video)
+      #expect(video.average_rating).to eq()
+    end
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

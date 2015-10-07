@@ -3,24 +3,25 @@ require 'spec_helper'
 describe VideosController do
   describe 'GET show' do
     context 'with authentication' do
-      before { session[:user_id] = Fabricate(:user).id }
+      let!(:video) { Fabricate(:video) }
+
+      before do
+        session[:user_id] = Fabricate(:user).id
+        get :show, id: video.id
+      end
 
       it 'sets the @video' do
-        video = Fabricate(:video)
-        session[:user_id] = Fabricate(:user).id
-
-        get :show, id: video.id
         expect(assigns(:video)).to eq(video)
       end
 
-      it 'renders the show template' do
-        video = Fabricate(:video)
-        session[:user_id] = Fabricate(:user).id
+      it 'sets the @reviews' do
+        expect(assigns(:reviews)).to eq(video.reviews.sort_by { |r| r.created_at })
+      end
 
-        get :show, id: video.id
+      it 'renders the show template' do
         expect(response).to render_template(:show)
       end
-    end
+   end
 
     context 'without authentication' do
       it 'redirects to root' do
