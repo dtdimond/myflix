@@ -6,9 +6,12 @@ Myflix::Application.routes.draw do
     collection do
       get 'search', to: 'videos#search'
     end
+
+    resources :reviews, only: [:create]
   end
 
   resources :categories, only: [:show]
+
 
   get '/login', to: 'sessions#new'
   get '/logout', to: 'sessions#destroy'
