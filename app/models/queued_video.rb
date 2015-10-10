@@ -5,8 +5,9 @@ class QueuedVideo < ActiveRecord::Base
   validates :order, presence: true
 
   def review_rating
-    if video.reviews.any?
-      Review.find_by(user: user, video: video).rating
+    review = Review.find_by(user: user, video: video)
+    if review
+      review.rating
     else
        ""
     end

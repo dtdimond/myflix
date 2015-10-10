@@ -6,7 +6,6 @@ describe QueuedVideo do
   it { should validate_presence_of(:order) }
 
   describe 'review_rating' do
-
     it 'returns the review rating if there is a review' do
       user = Fabricate(:user)
       review = Fabricate(:review, user: user)
@@ -16,9 +15,19 @@ describe QueuedVideo do
       expect(queued_video.review_rating).to eq(review.rating)
     end
 
-    it 'returns "" if there is no review' do
+    it 'returns "" if there is no review for the video' do
       user = Fabricate(:user)
       video = Fabricate(:video, reviews: [])
+      queued_video = Fabricate(:queued_video, user: user, video: video)
+
+      expect(queued_video.review_rating).to eq("")
+    end
+
+    it 'returns "" if there is a review for the video but not by the current_user' do
+      user = Fabricate(:user)
+      user2 = Fabricate(:user)
+      review = Fabricate(:review, user: user2)
+      video = Fabricate(:video, reviews: [review])
       queued_video = Fabricate(:queued_video, user: user, video: video)
 
       expect(queued_video.review_rating).to eq("")
