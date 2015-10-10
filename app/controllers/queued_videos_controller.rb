@@ -6,20 +6,31 @@ class QueuedVideosController < ApplicationController
   end
 
   def create
-    QueuedVideo.create(order: max_order + 1,
-                       video_id: params[:video_id], user: current_user)
+    queue_video(params[:video_id])
     redirect_to queued_videos_path
   end
 
+  def destroy
+    queued_vid = QueuedVideo.find(params[:id])
+    queued_vid.delete if queued_vid.user == current_user
+    redirect_to queued_videos_path
+  end
 
   private
-
-  def max_order
-    max = QueuedVideo.maximum(:order)
-    if max
-      max
-    else
-      0
+  def queue_video(video_id)
+     if video_not_yet_queued?(video_id)
+      QueuedVideo.create(order: new_order,
+                         video_id: video_id, user: current_user)
     end
+  end
+
+  def video_not_yet_queued?(video_id)
+    QueuedVideo.find_by(video_id: video_id, user_id: current_user.id).nil?
+  end
+
+  def new_order
+    max = QueuedVideo.where(user: current_user).maximum(:order)
+    return max + 1 if max
+    return 1
   end
 end
