@@ -19,8 +19,8 @@ class QueuedVideosController < ApplicationController
   private
   def queue_video(video_id)
      if video_not_yet_queued?(video_id)
-      QueuedVideo.create(order: new_order,
-                         video_id: video_id, user: current_user)
+       QueuedVideo.create(order: new_order,
+                          video_id: video_id, user: current_user)
     end
   end
 
@@ -30,7 +30,6 @@ class QueuedVideosController < ApplicationController
 
   def new_order
     max = QueuedVideo.where(user: current_user).maximum(:order)
-    return max + 1 if max
-    return 1
+    max ? max + 1 : 1
   end
 end

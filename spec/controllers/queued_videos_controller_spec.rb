@@ -30,7 +30,7 @@ describe QueuedVideosController do
   describe 'POST create' do
     context 'with authentication' do
       let(:user) { Fabricate(:user) }
-      let!(:video1) { Fabricate(:video) }
+      let(:video1) { Fabricate(:video) }
 
       before do
         session[:user_id] = user.id
@@ -58,7 +58,7 @@ describe QueuedVideosController do
         expect(QueuedVideo.count).to eq(1)
       end
 
-      it 'redirects to queued_videos#index' do
+      it 'redirects to queued_videos_path' do
         expect(response).to redirect_to(queued_videos_path)
       end
     end
@@ -71,7 +71,7 @@ describe QueuedVideosController do
         expect(QueuedVideo.count).to eq(0)
       end
 
-      it 'redirects to /login' do
+      it 'redirects to login_path' do
         expect(response).to redirect_to(login_path)
       end
     end
@@ -98,14 +98,14 @@ describe QueuedVideosController do
         expect(QueuedVideo.count).to eq(1)
       end
 
-      it 'redirects to queued_videos#index' do
+      it 'redirects to queued_videos_path' do
         queue = Fabricate(:queued_video, user: user)
         delete :destroy, id: queue.id
         expect(response).to redirect_to(queued_videos_path)
       end
     end
 
-    it 'redirects to /login in not authenticated' do
+    it 'redirects to login_path in not authenticated' do
         queue = Fabricate(:queued_video)
         delete :destroy, id: queue.id
         expect(response).to redirect_to(login_path)
