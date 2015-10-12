@@ -12,6 +12,7 @@ Myflix::Application.routes.draw do
 
   resources :categories, only: [:show]
 
+  resources :queued_videos, only: [:index, :create, :destroy]
 
   get '/login', to: 'sessions#new'
   get '/logout', to: 'sessions#destroy'

@@ -9,20 +9,24 @@
 Category.create(title: "Historical")
 Category.create(title: "Pyschothriller")
 
-User.create(full_name: "John Moviegoer", email: "john@movies.com", password: "Password")
+user1 = User.create(full_name: "John Moviegoer", email: "john@movies.com", password: "Password")
+user2 = User.create(full_name: "John Cineman", email: "cineman@movies.com", password: "Password")
 
-Video.create(title: "Braveheart",
-             description: "Mel Gibson gets angry.",
-             small_cover_url: "/tmp/monk.jpg",
-             large_cover_url: "/tmp/monk_large.jpg",
-             category_id: 1)
+braveheart = Video.create(title: "Braveheart",
+                          description: "Mel Gibson gets angry.",
+                          small_cover_url: "/tmp/monk.jpg",
+                          large_cover_url: "/tmp/monk_large.jpg",
+                          category_id: 1)
 
-Video.create(title: "Ex Machina",
-             description: "Robots be crazy.",
-             small_cover_url: "/tmp/family_guy.jpg",
-             large_cover_url: "/tmp/futurama.jpg",
-             category_id: 2)
+machina = Video.create(title: "Ex Machina",
+                       description: "Robots be crazy.",
+                       small_cover_url: "/tmp/family_guy.jpg",
+                       large_cover_url: "/tmp/futurama.jpg",
+                       category_id: 2)
 
-Review.create(text: "Braveheart sucks.", rating: 1, video: Video.first, user: User.first)
-Review.create(text: "Best movie ever.", rating: 4, video: Video.first, user: User.first)
+Review.create(text: "Braveheart sucks.", rating: 1, video: braveheart, user: user1)
+Review.create(text: "Best movie ever.", rating: 4, video: braveheart, user: user1)
 
+QueuedVideo.create(order: 1, video: Video.first, user: user1)
+QueuedVideo.create(order: 2, video: Video.second, user: user1)
+QueuedVideo.create(order: 1, video: Video.second, user: user2)
