@@ -21,5 +21,4 @@ class QueuedVideo < ActiveRecord::Base
   def video_category_title
     self.video.category.title
   end
-
 end

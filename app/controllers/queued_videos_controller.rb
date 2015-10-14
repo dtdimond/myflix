@@ -14,7 +14,7 @@ class QueuedVideosController < ApplicationController
     queued_vid = QueuedVideo.find(params[:id])
     if queued_vid.user == current_user
       queued_vid.delete
-      normalize_orders
+      current_user.normalize_queued_videos_order
     end
     redirect_to queued_videos_path
   end
@@ -23,7 +23,7 @@ class QueuedVideosController < ApplicationController
     begin
       if params[:queued_videos]
         update_orders(params[:queued_videos])
-        normalize_orders
+        current_user.normalize_queued_videos_order
       end
     rescue ActiveRecord::RecordInvalid
       flash[:danger] = "Invalid position numbers."
@@ -47,12 +47,6 @@ class QueuedVideosController < ApplicationController
         end
 
       end
-    end
-  end
-
-  def normalize_orders
-    current_user.queued_videos.each_with_index do |q_video, index|
-      q_video.update_attributes(order: index + 1)
     end
   end
 
