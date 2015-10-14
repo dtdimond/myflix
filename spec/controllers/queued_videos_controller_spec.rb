@@ -130,28 +130,45 @@ describe QueuedVideosController do
       end
 
       context 'with valid inputs' do
-        let(:queue1) { Fabricate(:queued_video, user: user, order: 1) }
-        let(:queue2) { Fabricate(:queued_video, user: user, order: 2) }
-        let(:queue3) { Fabricate(:queued_video, user: user, order: 3) }
+        let(:review) { Fabricate(:review, user: user, rating: 3) }
+        let(:vid) { Fabricate(:video, reviews: []) }
+        let(:reviewed_vid1) { Fabricate(:video, reviews: [review]) }
+        let(:reviewed_vid2) { Fabricate(:video, reviews: [review]) }
+        let(:queue1) { Fabricate(:queued_video, user: user, order: 1, video: vid) }
+        let(:queue2) { Fabricate(:queued_video, user: user, order: 2, video: reviewed_vid1) }
+        let(:queue3) { Fabricate(:queued_video, user: user, order: 3, video: reviewed_vid2) }
 
-        it 'changes the queued videos orders based on what is set in the params' do
-          post :update, queued_videos: [{id: queue1.id, order: 2},
-                                        {id: queue2.id, order: 3},
-                                        {id: queue3.id, order: 1}]
+        it 'changes the queued videos orders based on the given params' do
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                        {id: queue2.id, order: 3, rating: 3},
+                                        {id: queue3.id, order: 1, rating: 3}]
           expect(user.queued_videos).to eq([queue3, queue1, queue2])
         end
 
         it 'normalizes the orders to 1' do
-          post :update, queued_videos: [{id: queue1.id, order: 2},
-                                        {id: queue2.id, order: 7},
-                                        {id: queue3.id, order: 1}]
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                        {id: queue2.id, order: 7, rating: 3},
+                                        {id: queue3.id, order: 1, rating: 3}]
           expect(user.queued_videos.map(&:order)).to eq([1,2,3])
         end
 
+        it 'creates a new review if a rating is supplied for video without a review' do
+          post :update, queued_videos: [{id: queue1.id, order: 1, rating: 1}]
+          expect(queue1.video.reviews.count).to eq(1)
+          expect(queue1.rating).to eq(1)
+        end
+
+        it 'changes the reviews based on the given params if the videos have reviews' do
+          post :update, queued_videos: [{id: queue2.id, order: 1, rating: 1},
+                                        {id: queue3.id, order: 5, rating: 5}]
+          expect(queue2.rating).to eq(1)
+          expect(queue3.rating).to eq(5)
+        end
+
         it 'redirects to queued_videos_path' do
-          post :update, queued_videos: [{id: queue1.id, order: 2},
-                                        {id: queue2.id, order: 3},
-                                        {id: queue3.id, order: 1}]
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                        {id: queue2.id, order: 3, rating: 3},
+                                        {id: queue3.id, order: 1, rating: 3}]
           expect(response).to redirect_to(queued_videos_path)
         end
       end
@@ -162,9 +179,9 @@ describe QueuedVideosController do
         let(:queue3) { Fabricate(:queued_video, user: user, order: 3) }
 
         before do
-          post :update, queued_videos: [{id: queue1.id, order: 2},
-                                        {id: queue2.id, order: 3.5},
-                                        {id: queue3.id, order: 4}]
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                        {id: queue2.id, order: 3.5, rating: 3},
+                                        {id: queue3.id, order: 4, rating: 3}]
         end
 
         it 'does not reorder any of the videos' do
@@ -192,10 +209,26 @@ describe QueuedVideosController do
           queue2 = Fabricate(:queued_video, user: other_user, order: 2)
           queue3 = Fabricate(:queued_video, user: user, order: 2)
 
-          post :update, queued_videos: [{id: queue1.id, order: 2},
-                                        {id: queue2.id, order: 1},
-                                        {id: queue3.id, order: 1}]
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                        {id: queue2.id, order: 1, rating: 3},
+                                        {id: queue3.id, order: 1, rating: 3}]
           expect(queue1.reload.order).to eq(1)
+        end
+
+        it 'does not change the reviews' do
+          other_user = Fabricate(:user)
+          review = Fabricate(:review, rating: 3, user: other_user)
+          reviewed_vid = Fabricate(:video, reviews: [review])
+          queue1 = Fabricate(:queued_video, video: reviewed_vid, user: other_user)
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 1}]
+          expect(queue1.rating).to eq(3)
+        end
+
+        it 'does not create any reviews' do
+          reviewed_vid = Fabricate(:video, reviews: [])
+          queue1 = Fabricate(:queued_video, video: reviewed_vid)
+          post :update, queued_videos: [{id: queue1.id, order: 2, rating: 1}]
+          expect(Review.all.count).to eq(0)
         end
       end
     end
@@ -208,8 +241,8 @@ describe QueuedVideosController do
     it 'does not reorder the videos if not authenticated' do
         queue1 = Fabricate(:queued_video, order: 1)
         queue2 = Fabricate(:queued_video, order: 2)
-        post :update, queued_videos: [{id: queue1.id, order: 2},
-                                      {id: queue2.id, order: 1}]
+        post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                      {id: queue2.id, order: 1, rating: 3}]
         expect(QueuedVideo.all).to eq([queue1, queue2])
     end
   end
