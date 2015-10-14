@@ -4,6 +4,7 @@
       %article
         %header
           %h2 My Queue
+      = form_tag queued_videos_update_path do
         %table.table
           %thead
             %tr
@@ -17,7 +18,8 @@
             - @queued_videos.each do |queued_video|
               %tr
                 %td
-                  %input.form-control(type="text" value="#{queued_video.order}")
+                  = hidden_field_tag "queued_videos[][id]", queued_video.id
+                  = text_field_tag "queued_videos[][order]", queued_video.order, class: "form-control"
                 %td
                   = link_to queued_video.video_title, queued_video.video
                 %td
@@ -27,6 +29,6 @@
                 %td
                   = link_to queued_video.video_category_title, queued_video.video.category
                 %td
-                  = link_to queued_video_path(queued_video), method: :delete do
+                  = link_to queued_video, method: :delete do
                     %i.glyphicon.glyphicon-remove
-        = button_to "Update Instant Queue", nil, class: "btn btn-default"
+        = submit_tag "Update Instant Queue", class: "btn btn-default"

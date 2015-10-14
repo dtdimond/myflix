@@ -4,6 +4,7 @@ describe QueuedVideo do
   it { should belong_to(:video) }
   it { should belong_to(:user) }
   it { should validate_presence_of(:order) }
+  it { should validate_numericality_of(:order) }
 
   describe 'review_rating' do
     it 'returns the review rating if there is a review' do

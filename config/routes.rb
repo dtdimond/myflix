@@ -13,6 +13,7 @@ Myflix::Application.routes.draw do
   resources :categories, only: [:show]
 
   resources :queued_videos, only: [:index, :create, :destroy]
+  post '/queued_videos/update', to: 'queued_videos#update'
 
   get '/login', to: 'sessions#new'
   get '/logout', to: 'sessions#destroy'

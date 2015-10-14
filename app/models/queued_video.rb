@@ -3,6 +3,7 @@ class QueuedVideo < ActiveRecord::Base
   belongs_to :user
 
   validates :order, presence: true
+  validates_numericality_of :order, {only_integer: true}
 
   def review_rating
     review = Review.find_by(user: user, video: video)
