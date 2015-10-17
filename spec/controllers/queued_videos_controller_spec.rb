@@ -124,10 +124,7 @@ describe QueuedVideosController do
   describe 'POST update' do
     context 'with authentication' do
       let(:user) { Fabricate(:user) }
-
-      before do
-        session[:user_id] = user.id
-      end
+      before { session[:user_id] = user.id }
 
       context 'with valid inputs' do
         let(:review) { Fabricate(:review, user: user, rating: 3) }
@@ -239,11 +236,11 @@ describe QueuedVideosController do
     end
 
     it 'does not reorder the videos if not authenticated' do
-        queue1 = Fabricate(:queued_video, order: 1)
-        queue2 = Fabricate(:queued_video, order: 2)
-        post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
-                                      {id: queue2.id, order: 1, rating: 3}]
-        expect(QueuedVideo.all).to eq([queue1, queue2])
+      queue1 = Fabricate(:queued_video, order: 1)
+      queue2 = Fabricate(:queued_video, order: 2)
+      post :update, queued_videos: [{id: queue1.id, order: 2, rating: 3},
+                                    {id: queue2.id, order: 1, rating: 3}]
+      expect(QueuedVideo.all).to eq([queue1, queue2])
     end
   end
 

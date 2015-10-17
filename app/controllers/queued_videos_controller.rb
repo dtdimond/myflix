@@ -40,7 +40,7 @@ class QueuedVideosController < ApplicationController
       queued_videos_data.each do |q_video_data|
         q_video = QueuedVideo.find(q_video_data[:id])
         if current_user == q_video.user
-          q_video.update_attributes!(order: q_video_data[:order], rating: q_video_data[:rating])
+          q_video.update!(order: q_video_data[:order], rating: q_video_data[:rating])
         else
           #Error causes transaction to rollback
           raise 'Bad user exception'

@@ -35,7 +35,7 @@ describe QueuedVideo do
     end
   end
 
-  describe 'rating=' do
+  describe '#rating=' do
     it 'sets the review rating to new_rating if the review exists' do
       user = Fabricate(:user)
       review = Fabricate(:review, user: user, rating: 3)
