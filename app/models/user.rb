@@ -12,4 +12,8 @@ class User < ActiveRecord::Base
       q_video.update_attributes(order: index + 1)
     end
   end
+
+  def video_queued?(video)
+    video ? (queued_videos & video.queued_videos).any? : false
+  end
 end

@@ -19,13 +19,15 @@
                 %tr
                   %td
                     = hidden_field_tag "queued_videos[][id]", queued_video.id
-                    = text_field_tag "queued_videos[][order]", queued_video.order, class: "form-control"
+                    = text_field_tag "queued_videos[][order]", queued_video.order,
+                    class: "form-control", id: "queued_video_order_#{queued_video.video.id}"
                   %td
-                    = link_to queued_video.video_title, queued_video.video
+                    = link_to queued_video.video_title, queued_video.video, id: queued_video.video.id
                   %td
                     = button_to "Play", nil, class: "btn btn-default"
                   %td
-                    = select_tag "queued_videos[][rating]", options_for_video_reviews(queued_video.rating), include_blank: true
+                    = select_tag "queued_videos[][rating]",
+                    options_for_video_reviews(queued_video.rating), include_blank: true
                   %td
                     = link_to queued_video.video_category_title, queued_video.video.category
                   %td
