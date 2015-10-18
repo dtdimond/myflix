@@ -9,7 +9,8 @@
           %span Rating: #{@video.average_rating}/5.0
         %p= @video.description
         .actions
-          = link_to "+ My Queue", queued_videos_path(video_id: @video.id), method: "post", class: "btn btn-primary"
+          = link_to "+ My Queue", queued_videos_path(video_id: @video.id),
+          method: "post", class: "btn btn-primary" if !current_user.video_queued? @video
 /          %a.btn.btn-primary(href="") Watch Now
 %section.reviews.container
   .row
@@ -20,7 +21,7 @@
             %label Rate this video
             .row
               .col-sm-3
-                = f.select :rating, options_for_select([5,4,3,2,1].map { |n| [pluralize(n, "Star")]})
+                = f.select :rating, options_for_video_reviews
           .form-group
             %label Write Review
             .row
