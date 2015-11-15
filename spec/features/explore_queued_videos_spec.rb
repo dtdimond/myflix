@@ -1,13 +1,9 @@
 require 'spec_helper'
 
 feature "User interacts with the queue" do
-  background do
-
-  end
   given!(:video1) { Fabricate(:video) }
   given!(:video2) { Fabricate(:video) }
   given!(:video3) { Fabricate(:video) }
-  given(:user) { Fabricate(:user) }
 
   scenario "User adds video to queue and reorders them" do
     sign_in
