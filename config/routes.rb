@@ -23,7 +23,8 @@ Myflix::Application.routes.draw do
   resources :users, only: [:create, :show]
 
   get '/people', to: 'followings#index', as: 'followings'
-  resources :followings, only: [:create, :destroy]
+  post '/followings', to: 'followings#create', as: 'create_following'
+  resources :followings, only: [:destroy]
 
   get 'ui(/:action)', controller: 'ui'
 end

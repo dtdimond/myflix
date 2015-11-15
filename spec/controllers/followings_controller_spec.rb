@@ -57,6 +57,22 @@ describe FollowingsController do
     it_behaves_like 'requires sign in' do
       let(:action) { get :index }
     end
+
+    context 'with authenticated user' do
+      let(:other_user) {Fabricate(:user)}
+      before { set_current_user }
+
+      it 'sets the @followings' do
+        Fabricate(:following, user: current_user, follow: other_user)
+        get :index
+        expect(assigns(:followings)).to eq([Following.first])
+      end
+
+      it 'renders the index template' do
+        get :index
+        expect(response).to render_template :index
+      end
+    end
   end
 end
 
