@@ -16,9 +16,9 @@ describe FollowingsController do
         expect(flash[:success]).not_to be_blank
       end
 
-      it 'redirects to the users_path' do
+      it 'redirects to the followings_path' do
         post :create, follow_id: other_user
-        expect(response).to redirect_to users_path
+        expect(response).to redirect_to followings_path
       end
     end
 
@@ -42,14 +42,20 @@ describe FollowingsController do
         expect(flash[:success]).not_to be_blank
       end
 
-      it 'redirects to the users_path' do
+      it 'redirects to the followings_path' do
         delete :destroy, id: following.id
-        expect(response).to redirect_to users_path
+        expect(response).to redirect_to followings_path
       end
     end
 
     it_behaves_like 'requires sign in' do
       let(:action) { post :destroy, id: 1 }
+    end
+  end
+
+  describe 'GET index' do
+    it_behaves_like 'requires sign in' do
+      let(:action) { get :index }
     end
   end
 end
